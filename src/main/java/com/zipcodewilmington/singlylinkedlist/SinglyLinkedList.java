@@ -1,5 +1,7 @@
 package com.zipcodewilmington.singlylinkedlist;
 
+import com.sun.jmx.snmp.SnmpInt;
+
 import javax.xml.bind.Element;
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -7,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * Created by leon on 1/10/18.
  */
-public class SinglyLinkedList {
+public class SinglyLinkedList implements Cloneable{
     Node head;
 
     public static class Node{
@@ -72,15 +74,65 @@ public class SinglyLinkedList {
         return false;
     }
 
-    public static void printList(SinglyLinkedList list){
+    public int size(SinglyLinkedList list){
+        int count = 0;
         Node currNode = list.head;
-
-        System.out.println("\nLinkedList: ");
-
         while (currNode != null){
-            System.out.println(currNode.data + " ");
-
+            count++;
             currNode = currNode.next;
         }
+        return count;
+    }
+
+    public int get(SinglyLinkedList list, int index){
+        Node currNode = list.head;
+        int count = 0;
+        while (currNode != null){
+            if (count == index){
+                return currNode.data;
+            } else {
+                currNode = currNode.next;
+                count++;
+            }
+        }
+        return -1;
+    }
+
+    public SinglyLinkedList copy(SinglyLinkedList list) {
+        try
+        {
+            SinglyLinkedList list2 = (SinglyLinkedList) list.clone();
+            return list2;
+        }
+        catch (CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void sort(SinglyLinkedList list){
+        Node currNode = list.head;
+        int counter = 0;
+        while (currNode != null && currNode.next != null){
+            if (currNode.data > (currNode.next).data){
+                int temp1 = currNode.data;
+                int temp2 = currNode.next.data;
+
+                list.set(list, counter, temp2);
+                list.set(list, counter + 1, temp1);
+            }
+            currNode = currNode.next;
+            counter++;
+        }
+    }
+
+    public void set(SinglyLinkedList list, int index, int data){
+        int count = 0;
+        Node currNode = list.head;
+        while (count < index){
+            currNode = currNode.next;
+            count++;
+        }
+        currNode.data = data;
     }
 }
